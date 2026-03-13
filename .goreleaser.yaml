@@ -4,6 +4,7 @@ before:
 builds:
   - env:
       - CGO_ENABLED=0
+    id: woodpecker
     main: ./cmd/woodpecker
     goos:
       - linux
@@ -15,6 +16,7 @@ builds:
       - "-X github.com/operantai/woodpecker/cmd/woodpecker/cmd.BuildDate={{ .Date }}"
   - env:
       - CGO_ENABLED=0
+    id: woodpecker-mcp-verifier
     main: ./cmd/woodpecker-mcp-verifier
     goos:
       - linux
@@ -26,7 +28,7 @@ builds:
       - "-X github.com/operantai/woodpecker/cmd/woodpecker-mcp-verifier/cmd.BuildDate={{ .Date }}"
 
 archives:
-  - format: tar.gz
+  - formats: [ tar.gz ]
     name_template: >-
       {{ .ProjectName }}_
       {{- title .Os }}_
@@ -37,11 +39,11 @@ archives:
     # use zip for windows archives
     format_overrides:
     - goos: windows
-      format: zip
+      formats: [ zip ]
 checksum:
   name_template: 'checksums.txt'
 snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+  version_template: "{{ incpatch .Version }}-next"
 changelog:
   sort: asc
   filters:
